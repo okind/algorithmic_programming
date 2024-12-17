@@ -32,29 +32,32 @@ Algorithm steps:
 # Definition for singly-linked list.
 # The ListNode class represents a node in a singly linked list.
 # It is a basic building block for creating and working with linked lists in Python.
+
+
 class ListNode:
-    #Initializes a node with a value (val) and a pointer to the next node (next).
+    # Initializes a node with a value (val) and a pointer to the next node (next).
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
 
+
 class ListUtils(object):
     # The method takes two inputs: head: The head of a singly linked list.
     # k: The number of positions to rotate the list to the right.
-    def rotateRight(self, head : ListNode, k):
+    def rotateRight(self, head: ListNode, k):
         if not head or not head.next or k == 0:
             return head
-        
+
         length = 1
         tail = head
         while tail.next:
             length += 1
             tail = tail.next
-        
+
         rotations_num = k % length
         if rotations_num == 0:
             return head
-    
+
         # Separate at breakpoint and set a new head
         breakpoint = head
         for i in range(length - rotations_num - 1):
@@ -63,5 +66,5 @@ class ListUtils(object):
         breakpoint.next = None
 
         # Point tail to head
-        tail.next = head   
+        tail.next = head
         return new_head

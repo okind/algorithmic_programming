@@ -1,9 +1,11 @@
 import unittest
 from rotate_linked_list import ListUtils, ListNode
 
-#write unit tests
+# write unit tests
+
+
 class TestRotateLinkedList(unittest.TestCase):
-    sut = ListUtils();
+    sut = ListUtils()
 
     def create_linked_list(self, values):
         """Helper function to create a linked list from a list of values"""
@@ -15,7 +17,7 @@ class TestRotateLinkedList(unittest.TestCase):
             current.next = ListNode(val)
             current = current.next
         return head
-    
+
     def linked_list_to_list(self, head):
         """Helper function to convert linked list to regular list for comparison"""
         result = []
@@ -64,7 +66,7 @@ class TestRotateLinkedList(unittest.TestCase):
         head = self.create_linked_list([1, 2])
         rotated = self.sut.rotateRight(head, 1)
         self.assertEqual(self.linked_list_to_list(rotated), [2, 1])
-        
+
     def test_cycle_detection(self):
         """Test that the rotation doesn't create unintended cycles"""
         head = self.create_linked_list([1, 2, 3, 4, 5])
@@ -74,6 +76,7 @@ class TestRotateLinkedList(unittest.TestCase):
         while current.next:
             current = current.next
         self.assertIsNone(current.next)
+
 
 if __name__ == '__main__':
     unittest.main()
