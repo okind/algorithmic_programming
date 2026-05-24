@@ -26,6 +26,30 @@ class Schema:
         """
         return self.columns
 
+    def get_missing_columns(self, columns: list) -> list:
+        """
+        Get a list of columns that don't exist in the schema.
+
+        Args:
+            columns: List of column names to verify
+
+        Returns:
+            List of column names that are not in the schema
+        """
+        return [col for col in columns if col not in self.columns]
+
+    def has_all_columns(self, columns: list) -> bool:
+        """
+        Check if all specified columns exist in the schema.
+
+        Args:
+            columns: List of column names to verify
+
+        Returns:
+            True if all columns exist in the schema, False otherwise
+        """
+        return len(self.get_missing_columns(columns)) == 0
+
 
 class Table:
     """
@@ -52,17 +76,14 @@ class Table:
             row: Dictionary with column names as keys and values
 
         Returns:
-            True if row is inserted successfully, False if row is None
+            True if row is inserted successfully, False if row is None or contains invalid columns
         """
         if row is None:
             return False
 
-        # dict key is column name; value is the value for that column
-        # c1, v1; c2, v2; c3, v3.
         # Check that all columns in the row are defined in the schema
-        for column in row.keys():
-            if column not in self.schema.get_columns():
-                return False
+        if not self.schema.has_all_columns(row.keys()):
+            return False
 
         self.rows.append(row)
         return True
@@ -84,10 +105,9 @@ class Table:
             return self.rows
 
         # Verify that all requested columns exist in the schema
-        schema_columns = self.schema.get_columns()
-        for column in columns:
-            if column not in schema_columns:
-                raise InvalidColumnError(f"Column '{column}' not found in table schema")
+        missing_columns = self.schema.get_missing_columns(columns)
+        if missing_columns:
+            raise InvalidColumnError(f"Column '{missing_columns[0]}' not found in table schema")
 
         selected_rows = []
         for row in self.rows:
